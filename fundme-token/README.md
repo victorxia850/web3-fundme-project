@@ -1,4 +1,4 @@
-# 一Coin 和 Token 的区别
+# 一、Coin 和 Token 的区别
 
 ## 🧠 1. 一句话理解
 
@@ -169,7 +169,7 @@ uri(tokenId)
 | 大量铸造 NFT、组合道具发行   | ERC1155 |
 | DAO 治理 / 投票 / 投资  | ERC20   |
 
-# 🔸 三、功能简介
+# 三、功能简介
 
 在本项目中，我们实现了两种形式的 FT（Fungible Token，代币）合约：
 
@@ -242,31 +242,45 @@ contract FundTokenSimple02 is ERC20 {
     }
 }
 ```
-🔸 ERC20 中字段和方法说明（由 OpenZeppelin 提供）
-🔧 常用字段
-字段名	类型	说明
-_balances	mapping	存储各账户余额
-_allowances	mapping	存储授权额度（双层映射）
-_totalSupply	uint256	总发行量
 
-🛠️ 常用方法
-方法名	说明
-totalSupply()	返回代币总量
-balanceOf(address)	返回账户余额
-transfer(address,uint256)	发起转账
-approve(address,uint256)	授权他人支配你的代币
-allowance(owner, spender)	查询授权额度
-transferFrom(from, to, amount)	执行授权转账
-_mint(address, amount)	内部函数：铸造代币
-_burn(address, amount)	内部函数：销毁代币
+## 🔸 ERC20 中字段和方法说明（由 OpenZeppelin 提供）
 
-🆚 功能对比总结
-特性	FundTokenSimple01（自定义）	FundTokenSimple02（ERC20标准）
-是否标准	❌ 非 ERC20 标准	✅ 符合 ERC20 标准
-是否包含授权逻辑	❌ 无 approve / transferFrom	✅ 包含完整授权逻辑
-安全性	⚠️ 简单实现，缺少校验与事件	✅ 标准库，经过社区审计
-事件通知	❌ 无	✅ 内置事件 Transfer、Approval
-可扩展性	🚧 需手动实现	✅ 易于扩展（如加上 ERC20Permit）
-适用场景	🎓 学习、教学	🚀 正式生产环境
+### 🔧 常用字段
 
-✅ 推荐使用 OpenZeppelin 的 ERC20 实现，除非你正在做协议层创新或安全实验。
+| 字段名         | 类型     | 说明                   |
+|----------------|----------|------------------------|
+| `_balances`     | mapping  | 存储各账户余额         |
+| `_allowances`   | mapping  | 存储授权额度（双层映射）|
+| `_totalSupply`  | uint256  | 总发行量               |
+
+---
+
+### 🛠️ 常用方法
+
+| 方法名                              | 说明                           |
+|-------------------------------------|--------------------------------|
+| `totalSupply()`                     | 返回代币总量                   |
+| `balanceOf(address)`               | 返回账户余额                   |
+| `transfer(address,uint256)`        | 发起转账                       |
+| `approve(address,uint256)`         | 授权他人支配你的代币           |
+| `allowance(owner, spender)`        | 查询授权额度                   |
+| `transferFrom(from, to, amount)`   | 执行授权转账                   |
+| `_mint(address, amount)`           | 内部函数：铸造代币             |
+| `_burn(address, amount)`           | 内部函数：销毁代币             |
+
+---
+
+## 🆚 功能对比总结
+
+| 特性               | FundTokenSimple01（自定义） | FundTokenSimple02（ERC20标准） |
+|--------------------|-----------------------------|---------------------------------|
+| 是否标准           | ❌ 非 ERC20 标准             | ✅ 符合 ERC20 标准              |
+| 是否包含授权逻辑   | ❌ 无 `approve` / `transferFrom` | ✅ 包含完整授权逻辑      |
+| 安全性             | ⚠️ 简单实现，缺少校验与事件  | ✅ 标准库，经过社区审计         |
+| 事件通知           | ❌ 无                         | ✅ 内置事件 `Transfer`、`Approval` |
+| 可扩展性           | 🚧 需手动实现                | ✅ 易于扩展（如加上 `ERC20Permit`） |
+| 适用场景           | 🎓 学习、教学                 | 🚀 正式生产环境                |
+
+---
+
+> ✅ **推荐使用 OpenZeppelin 的 ERC20 实现**，除非你正在做协议层创新或安全实验。
