@@ -4,6 +4,7 @@ pragma solidity ^0.8.20;
 import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
 contract FundMe{
+
     
     uint256 constant MINIMUM_VALUE_USD = 1 ; // 投资人每次 fund 最低是 100 USD
 
@@ -13,9 +14,13 @@ contract FundMe{
 
     address public owner;
 
+    address public erc20Addr;
+
     uint256 public deploymentTimestamp;
 
     uint256 public lockTime;
+
+    bool public getFundSuccess = false;
 
     AggregatorV3Interface internal dataFeed;
 
@@ -50,7 +55,7 @@ contract FundMe{
         2. 此操作需要在窗口期结束后
         3. 筹款的合约金额达到目标值
      */
-    function withdrawFunds() external onlyByOwner checkNotInWindowClosed { 
+    function getFunds() external onlyByOwner checkNotInWindowClosed { 
 
         // 1. only can be called by owner
         // require(msg.sender == owner, "Only can be called by");
@@ -70,6 +75,8 @@ contract FundMe{
         // 5. why ? 
         funder2Amount[msg.sender] = 0 ;
 
+        // 6. update the flag;
+        getFundSuccess = true;
     }
 
     
@@ -79,7 +86,7 @@ contract FundMe{
         2. 此操作需要在窗口期结束后
         3. 筹款的合约金额没有达到目标值
      */
-    function claimRefund() external checkNotInWindowClosed {
+    function withdrawFunds() external checkNotInWindowClosed {
         // 1. should be not in window time
         //  require(block.timestamp >= deploymentTimestamp + lockTime, "Window is not closed");
 
@@ -117,6 +124,22 @@ contract FundMe{
         uint256 ethPrice = uint256(getChainlinkDataFeedLatestAnswer());
         return (ethPrice * ethAmount) / (10 **18) / (10 ** 8) ;
     }
+
+    /*
+     funder 在 mint token 后，需要更新其在合约中的 fund 的金额
+    */
+    function setFunderToAmount(address funder, uint256 amountToUpdate) external {
+        require(funder==erc20Addr, "Only ERC20 address can call this API");
+        funder2Amount[funder] = amountToUpdate;
+    }
+
+    /*
+     owner 可设置 erc20 地址
+    */
+    function setErc20Addr(address _erc20Addr) public onlyByOwner {
+        erc20Addr = _erc20Addr;
+    }
+
 
     function getLatestPrice() public view returns (int) {
         (, int price, , , ) = dataFeed.latestRoundData();
