@@ -1,0 +1,29 @@
+{
+  "name": "fundme-hardhat-simple02",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "encrypt": "node scripts/encrypt-env.js",
+    "decrypt": "node scripts/decrypt-env.js",
+    "deploy": "npx hardhat run scripts/deployFundMe.js --network sepolia",
+    "deploy:only": "npx hardhat run scripts/deployFundMe.js deploy-only --network sepolia",
+    "deploy:verify": "npx hardhat run scripts/deployFundMe.js deploy-and-verify --network sepolia",
+    "verify:deployed": "npx hardhat run scripts/deployFundMe.js verify --network sepolia",
+    "verify": "npx hardhat run scripts/verifyFundMe.js --network sepolia",
+    "verify:contract": "npx hardhat run scripts/verifyContract.js --network sepolia",
+    "verify:manual": "npx hardhat verify --network sepolia"
+  },
+  "devDependencies": {
+    "@chainlink/contracts": "^1.3.0",
+    "@chainlink/env-enc": "^1.0.5",
+    "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "@nomiclabs/hardhat-etherscan": "^3.1.8",
+    "dotenv": "^17.2.0",
+    "ethers": "^5.7.2",
+    "hardhat": "^2.19.0"
+  }
+}
