@@ -1,6 +1,6 @@
 require("@nomiclabs/hardhat-ethers");
 require("@nomiclabs/hardhat-etherscan");
-require("@chainlink/env-enc").config();
+require("dotenv").config();
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
@@ -9,6 +9,7 @@ module.exports = {
     sepolia: {
       url: process.env.SEPOLIA_RPC_URL,
       accounts: [process.env.PRIVATE_KEY],
+      chainId: 11155111, // Sepolia chain ID: 可以通过此参数来判断部署的网络是否正确
     },
   },
   etherscan: {

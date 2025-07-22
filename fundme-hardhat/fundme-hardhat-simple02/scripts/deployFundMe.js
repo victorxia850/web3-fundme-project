@@ -40,6 +40,16 @@ async function deployFundMe(lockTime = 30 * 24 * 60 * 60) {
  * @returns {boolean} 验证是否成功
  */
 async function verifyFundMe(contractAddress, lockTime = 30 * 24 * 60 * 60) {
+  const chainId = (await ethers.provider.getNetwork()).chainId;
+  if (chainId !== 11155111) {
+    console.log("⚠️ 当前网络不是 Sepolia（chainId: 11155111），跳过合约验证。");
+    return true;
+  }
+  const apiKey = process.env.ETHERSCAN_API_KEY;
+  if (!apiKey) {
+    console.log("⚠️ 未检测到 ETHERSCAN_API_KEY，跳过合约验证。");
+    return true;
+  }
   console.log("🔐 开始验证 FundMe 合约...");
   console.log("📍 合约地址:", contractAddress);
   console.log("🔒 锁定时间:", lockTime, "秒");
@@ -106,7 +116,7 @@ async function deployAndVerify(lockTime = 30 * 24 * 60 * 60, shouldVerify = true
  */
 async function main() {
   const args = process.argv.slice(2);
-  const command = args[0] || 'deploy-and-verify'; // 默认执行部署
+  const command = args[0] || 'deploy'; // 默认执行部署
   
   const lockTime = 30 * 24 * 60 * 60; // 30天
   

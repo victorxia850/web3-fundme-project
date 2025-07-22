@@ -1,6 +1,16 @@
 // scripts/verifyContract.js
 
 async function main() {
+  const chainId = (await ethers.provider.getNetwork()).chainId;
+  if (chainId !== 11155111) {
+    console.log("⚠️ 当前网络不是 Sepolia（chainId: 11155111），跳过合约验证。");
+    return;
+  }
+  const apiKey = process.env.ETHERSCAN_API_KEY;
+  if (!apiKey) {
+    console.log("⚠️ 未检测到 ETHERSCAN_API_KEY，跳过合约验证。");
+    return;
+  }
   // 🔍 从命令行参数获取合约地址和构造函数参数
   const args = process.argv.slice(2);
   

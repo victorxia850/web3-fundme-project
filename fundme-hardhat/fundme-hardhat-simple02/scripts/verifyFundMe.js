@@ -1,6 +1,16 @@
 // scripts/verifyFundMe.js
 
 async function main() {
+  const chainId = (await ethers.provider.getNetwork()).chainId;
+  if (chainId !== 11155111) {
+    console.log("⚠️ 当前网络不是 Sepolia（chainId: 11155111），跳过合约验证。");
+    return;
+  }
+  const apiKey = process.env.ETHERSCAN_API_KEY;
+  if (!apiKey) {
+    console.log("⚠️ 未检测到 ETHERSCAN_API_KEY，跳过合约验证。");
+    return;
+  }
   // 🔍 合约地址和构造函数参数
   const contractAddress = "0x6BEbd9C82572975020dC08C9F96aDfdc64c37436"; // 替换为您的合约地址
   const lockTime = 30 * 24 * 60 * 60; // 30天，与部署时保持一致
